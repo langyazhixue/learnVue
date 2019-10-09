@@ -40,9 +40,9 @@ Vue.js源码分析，记录了个人学习Vue.js源码过程中的一些心得�
 
 Email：langyazhixue0412@outlook.com
 
-Github: [https://github.com/langyazhixue](https://github.com/answershuto)
+Github: [https://github.com/langyazhixue](https://github.com/langyazhixue)
 
-个人博客：[www.jiaxiaoxiao.club](www.jiaxiaoxiao.club)
+个人博客：[https://www.jiaxiaoxiao.club/](https://www.jiaxiaoxiao.club/)
 
 对内容有任何疑问，欢迎联系我。
 
