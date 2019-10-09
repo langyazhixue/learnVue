@@ -42,7 +42,7 @@ Email：langyazhixue0412@outlook.com
 
 Github: [https://github.com/langyazhixue](https://github.com/langyazhixue)
 
-个人博客：[https://www.jiaxiaoxiao.club/](https://www.jiaxiaoxiao.club/)
+个人博客：[https://www.jiaxiaoxiao.club](https://www.jiaxiaoxiao.club)
 
 对内容有任何疑问，欢迎联系我。
 
