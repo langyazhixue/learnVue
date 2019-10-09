@@ -33,3 +33,16 @@ Vue.js源码分析，记录了个人学习Vue.js源码过程中的一些心得�
 * KVuex: 在文件夹write-myself/KVuex中
 * Kvue-router: 在文件夹write-myself/KVue-router中
 
+
+## 关于作者
+
+作者： 琅琊雪
+
+Email：langyazhixue0412@outlook.com
+
+Github: [https://github.com/langyazhixue](https://github.com/answershuto)
+
+个人博客：[www.jiaxiaoxiao.club](www.jiaxiaoxiao.club)
+
+对内容有任何疑问，欢迎联系我。
+
