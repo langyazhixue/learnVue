@@ -5,7 +5,7 @@
 ---
 Vue.js源码分析，记录了个人学习Vue.js源码过程中的一些心得以及收获，以及对于Vue框架，周边库的一些个人理解
 
-在学校过程中我为Vue.js(2.6.10) 源码、Vuex源码、Vue-router源码加上了注释
+在学校过程中我为Vue.js(2.6.10) 源码、Vuex(3.1.1)源码、Vue-router源码加上了注释
   * Vue.js 在 vue-src 目录
   * Vuex 在 vuex-src  目录
   * Vue-router 在 vue-router-src 目录
