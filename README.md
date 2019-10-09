@@ -26,9 +26,23 @@ Vue.js源码分析，记录了个人学习Vue.js源码过程中的一些心得�
 ### vuex源码相关
 ### vue-router源码相关
 
+--- 
 ## 自己实现简版的KVue.js, KVuex, KVue-router
 
 * KVue.js: 在文件夹write-myself/KVue.js中
 * KVuex: 在文件夹write-myself/KVuex中
 * Kvue-router: 在文件夹write-myself/KVue-router中
+
+
+## 关于作者
+
+作者： 琅琊雪
+
+Email：langyazhixue0412@outlook.com
+
+Github: [https://github.com/langyazhixue](https://github.com/langyazhixue)
+
+个人博客：[https://www.jiaxiaoxiao.club](https://www.jiaxiaoxiao.club)
+
+对内容有任何疑问，欢迎联系我。
 
