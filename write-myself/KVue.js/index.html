@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>实现自己的KVue.js</title>
+</head>
+<body>
+  <h1>实现自己的KVue.js</h1>
+  <div id='app'>
+    <p>{{test}}</p>
+    <p k-text='test'>11</p>
+  </div>
+</body>
+</html>
+<script src='./compile.js'></script>
+<script src='./kvue.js'></script>
+
+<script>
+  const app = new KVue({
+    el:'#app',
+    data: {
+      test:' I am test',
+      name:'kaikeba',
+      foo:{
+        bar: 11
+      }
+    }
+  })
+
+  app.test='hello, kaikeba'
+
+  //app.$data.test='hello, kaikeba'
+  //app.$data.data.test='22'
+  
+  //app.foo.bar='hello, kaikeba'
+</script>
