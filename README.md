@@ -26,6 +26,7 @@ Vue.js源码分析，记录了个人学习Vue.js源码过程中的一些心得�
 ### vuex源码相关
 ### vue-router源码相关
 
+--- 
 ## 自己实现简版的KVue.js, KVuex, KVue-router
 
 * KVue.js: 在文件夹write-myself/KVue.js中
