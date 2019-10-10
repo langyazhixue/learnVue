@@ -16,6 +16,7 @@ Vue.js源码分析，记录了个人学习Vue.js源码过程中的一些心得�
 * Vue.js基础内容请看Vue.js官网，[https://cn.vuejs.org/v2/guide/](https://cn.vuejs.org/v2/guide/)
 * Vuex 基础内容请看Vuex文档，[https://vuex.vuejs.org/zh/guide/](https://vuex.vuejs.org/zh/guide/)
 * Vue-router 基础内容请看文档：[https://router.vuejs.org](https://router.vuejs.org)
+
 可能会有理解存在偏差或者理解不对的地方，欢迎提issue指出，共同学习，一起进步
 
 ## 文章目录
