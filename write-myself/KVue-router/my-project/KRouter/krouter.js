@@ -6,10 +6,10 @@
 let Vue
 class KRouter {
   // 1. 解析route 配置，生成 map
-  constructor(options) {
-    this.options = options
+  constructor (options) {
+    this.$options = options
     this.routerMap = {
-
+      // '/': 'component'
     }
     // url响应处理,只要 url 变化，用到url 的组件就会重新render
     // vue-router 跟 Vue 强耦合，只能用于vue
@@ -21,22 +21,22 @@ class KRouter {
   }
 
   // 声明初始化函数
-  init() {
-    // 1. 事件监听
-    this.bindEvents()
+  init () {
     // 2. 路由映射操作
     this.createRouteMap()
+    // 1. 事件监听
+    this.bindEvents()
     // 组件声明和注册
     this.initComponent()
   }
 
   // 路由映射操作
-  createRouteMap() {
+  createRouteMap () {
     this.$options.routes.forEach(item => {
       this.routerMap[item.path] = item
     })
   }
-  initComponent() {
+  initComponent () {
     Vue.component('router-link', {
       props: {
         to: {
@@ -44,7 +44,7 @@ class KRouter {
           default: '/'
         }
       },
-      render(h) {
+      render (h) {
         // h(tag, data, children)
         return h('a',
           {
@@ -69,20 +69,21 @@ class KRouter {
         // h(tag, data, children)
         // 拿出要渲染的组件
         // this 希望是 Router 实例
-        const component = this.routerMap(this.app.current).component
+        console.log(this)
+        const component = this.routerMap[this.app.current].component
         return h(component)
       }
     })
   }
   // 监听事件
   // hashchange
-  bindEvents() {
+  bindEvents () {
     window.addEventListener('hashchange', this.onHashChange.bind(this))
     // 件套
     window.addEventListener('load', this.onHashChange.bind(this))
   }
 
-  onHashChange() {
+  onHashChange () {
     // #/index
     console.log(window.location.hash)
     this.app.current = window.location.hash.slice(1) || '/'
@@ -90,12 +91,12 @@ class KRouter {
 }
 
 // 插件接受Vue构造函数
-KRouter.install = function(_vue) {
+KRouter.install = function (_vue) {
   Vue = _vue // 保存 Vue 构造函数
   console.log(this)
   // 混入：执行挂载操作
   Vue.mixin({
-    beforeCreate() {
+    beforeCreate () {
       // 只有根组件执行一次 实例存在后才会执行
       if (this.$options.router) {
         // 这里 this 是 实例
@@ -105,4 +106,5 @@ KRouter.install = function(_vue) {
     }
   })
 }
+
 export default KRouter

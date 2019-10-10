@@ -10,7 +10,14 @@
   <h1>实现自己的KVue.js</h1>
   <div id='app'>
     <p>{{test}}</p>
-    <p k-text='test'>11</p>
+    <p k-text="test"></p>
+    <p k-html="html"></p>
+    <p>
+        <input type="text" k-model="test">
+    </p>
+    <p>
+        <button @click="onClick">按钮</button>
+    </p>
   </div>
 </body>
 </html>
@@ -21,10 +28,15 @@
   const app = new KVue({
     el:'#app',
     data: {
-      test:' I am test',
-      name:'kaikeba',
+      test:'allala',
       foo:{
-        bar: 11
+        bar:'bar'
+      },
+      html:'<button>按钮</button>'
+    },
+    methods:{
+      onClick(){
+        alert('click')
       }
     }
   })

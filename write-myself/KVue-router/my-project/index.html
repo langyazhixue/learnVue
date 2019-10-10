@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>my-project</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <hr>
+
+    <div id='test'>
+      <h1>
+        <p>测试pushState：<button onclick="pushStateClick()">pushState</button></p>
+        <p>测试pushState：<button onclick="pushStateClick2()">pushState2</button></p>
+        <p>返回：<button onclick="back()">pushState2</button></p>
+      </h1>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+
+  window.addEventListener('popstate', function (evt) {
+    console.log('监听到了')
+    console.log(evt)
+    console.log(evt.state)
+    // evt.state 指向的是 最后倒数第二次 pushState 带的 state
+  }, false)
+
+  function pushStateClick () {
+    console.log('test')
+    window.history.pushState({
+      title: 'test',
+      url: '/test'
+    }, 'test', '/test') 
+    console.log(history)
+  }
+
+  function pushStateClick2 () {
+    console.log('test2')
+    window.history.pushState({
+      title: 'test2',
+      url: '/test2'
+    },'test2','/test2') 
+    console.log(history)
+  }
+
+  function back() {
+    history.back()
+  }
+  </script>
+</html>

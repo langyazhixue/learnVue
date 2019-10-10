@@ -57,7 +57,7 @@ class KVue {
       }
     })
   }
-
+  // 实现一个代理模式
   proxyData(key) {
     // 向 Vue 实例上去定义属性 key
     // this 指的是 实例
@@ -89,14 +89,11 @@ class Dep {
     this.deps.forEach(dep => dep.update())
   }
 }
-
-
 // watcher:执行具体的更新操作
 
 class Watcher {
   // 得知道是跟哪个实例相关联，还有哪个key
   constructor(vm,key,updater){
-    
     this.vm = vm
     this.key = key
     this.updater = updater // 有个更新函数
@@ -106,9 +103,7 @@ class Watcher {
   }
 
   update(){
-    console.log(this.vm[this.key])
-    debugger
-    this.updater.call(this.vm,this.vm[this.key])
     console.log(`属性${this.key}更新了1`)
+    this.updater.call(this.vm,this.vm[this.key])
   }
 }

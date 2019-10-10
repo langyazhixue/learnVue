@@ -1,13 +1,5 @@
 
-let Vue
-function install(_vue) {
-  Vue = _vue
-  Vue.mixin({
-    beforeCreate() {
-      this.$store = this.$options.store
-    }
-  })
-}
+// let Vue
 // 2. 实现 store
 // const getters = {
 //   // 就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算
@@ -16,7 +8,7 @@ function install(_vue) {
 //   // }
 // }
 
-class Store {
+class KVuex {
   constructor(optoins = {}) {
     //  响应化处理，把 state 变成响应化数据
     this.state = new Vue({
@@ -32,10 +24,11 @@ class Store {
     this.mutations[type](this.state, arg)
   }
   // 异步
-  diapatch(type, arg) {
+  dispatch(type, arg) {
     this.actions[type]({
       commit: this.commit,
-      state: this.state
+      state: this.state,
+      getters: this.getters,
     }, arg)
   }
   handleGetters(getters) {
@@ -51,7 +44,12 @@ class Store {
     })
   }
 }
-export {
-  Store,
-  install
+
+ // install  注册组件
+KVuex.install = function(Vue) {
+  Vue.mixin({
+    beforeCreate() {
+      this.$store = this.$options.store
+    }
+  })
 }

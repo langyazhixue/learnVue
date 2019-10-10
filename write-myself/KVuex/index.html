@@ -8,5 +8,35 @@
 </head>
 <body>
   <h1>实现自己的KVuex</h1>
+  <div id='app'>
+    <p>目前的计数:{{$store.state.count}}</p>
+    <p>getters中计数:{{$store.getters.count2}}</p>
+    <p><button @click='commit'>commit同步修改count</button></p>
+    <p><button @click='dispatch'>dispatch异步修改count</button></p>
+  </div>
 </body>
 </html>
+<script src='https://cdn.staticfile.org/vue/2.6.10/vue.min.js'></script>
+<script src='./kvue.js'></script>
+<script src='./store.js'></script>
+<script>
+Vue.use(KVuex)
+const store1 = new KVuex(store)
+var vm = new Vue({
+  store:store1,
+  el:'#app',
+  data:{
+    test:'test'
+  },
+  methods:{
+    commit(){
+      this.$store.commit('increment',{
+        count: 30
+      })
+    },
+    dispatch(){
+      this.$store.dispatch('asyncIncrement')
+    }
+  }
+})
+</script>

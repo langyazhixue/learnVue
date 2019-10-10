@@ -52,27 +52,14 @@ class Compile {
     // {{ a + b }}
     const exp = RegExp.$1
     this.update(node, exp ,'text')
-    
-
     //  创建
   }
-  // 通用方法 update(node, 'xxx', 'text)
-  update(node,exp ,dir) {
-    // 构造更新函数 并执行首次赋值
-    let updateFn = this[dir + 'Updater']
-    updateFn && updateFn(node,this.$vm[exp])
-
-    // 创建watcher,执行后续更新操作
-    // 额外传递一个更新函数，能够更新指定dom元素
-    new Watcher(this.$vm,exp,function(value){
-      updateFn && updateFn(node,value)
-    })
+  isDirective(attr) {
+    return attr.indexOf("k-") == 0;
   }
-
-  textUpdater(node,value){
-    node.textContent = value
+  isEventDirective(arrt) {
+    return arrt.indexOf('@') ===0
   }
-
   compileElement(node) {
     // 截获k-和@开头内容并解析
     // k-text
@@ -87,13 +74,58 @@ class Compile {
         // 指令 k-text k-model k-html
         const dir = attrName.substring(2) // text 
         this[dir] && this[dir](node,exp) // 也需要进行依赖收集
+      } else if(this.isEventDirective(attrName)) {
+        // 事件
+        const dir = attrName.substr(1); // click
+        this.eventHandler(node, exp, dir);
       }
     })
   }
-  isDirective(attr) {
-    return attr.indexOf("k-") == 0;
+  // 通用方法 update(node, 'xxx', 'text)
+  update(node,exp ,dir) {
+    // 构造更新函数 并执行首次赋值
+    let updateFn = this[dir + 'Updater']
+    updateFn && updateFn(node,this.$vm[exp])
+
+    // 创建watcher,执行后续更新操作
+    // 额外传递一个更新函数，能够更新指定dom元素
+    new Watcher(this.$vm,exp,function(value){
+      updateFn && updateFn(node,value)
+    })
   }
   text(node,exp) {
     this.update(node,exp,'text')
   }
+  html(node,exp) {
+    this.update(node,exp,'html')
+  }
+
+  // 双向绑定
+  model(node,exp) {
+    this.update(node,exp,'model')
+    let val = this.$vm[exp]
+    // 双绑定还要处理视图对模型的更新
+    // 针对的是input 
+    node.addEventListener('input', e => {
+      this.$vm[exp] = e.target.value
+    })
+  }
+  textUpdater(node,value){
+    node.textContent = value
+  }
+  
+  htmlUpdater(node, value) {
+    node.innerHTML = value;
+  }
+  modelUpdater(node, value) {
+    node.value = value;
+  }
+  eventHandler(node, exp,dir) {
+    // 去调用methods中的方法
+    let vm = this.$vm
+    let fn = vm.$options.methods && vm.$options.methods[exp]
+    if(dir && fn) {
+      node.addEventListener(dir,fn.bind(vm),false) // false 事件句柄在冒泡阶段执行
+    }
+  } 
 }
