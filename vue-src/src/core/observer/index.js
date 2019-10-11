@@ -34,6 +34,8 @@ export function toggleObserving (value: boolean) {
  * object's property keys into getter/setters that
  * collect dependencies and dispatch updates.
  */
+// 如果是对象就会有一个Observer实例与之对应
+// 
 export class Observer {
   value: any;
   dep: Dep;
@@ -44,8 +46,10 @@ export class Observer {
     this.dep = new Dep()
     this.vmCount = 0
     def(value, '__ob__', this)
+    // 当前对象是否是数组
     if (Array.isArray(value)) {
       if (hasProto) {
+        // 处理数组的原型
         protoAugment(value, arrayMethods)
       } else {
         copyAugment(value, arrayMethods, arrayKeys)
@@ -64,6 +68,7 @@ export class Observer {
   walk (obj: Object) {
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
+      // 对每个key 进行遍历
       defineReactive(obj, keys[i])
     }
   }
@@ -111,6 +116,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
   if (!isObject(value) || value instanceof VNode) {
     return
   }
+  // __ob__
   let ob: Observer | void
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
@@ -139,6 +145,7 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
+  // 一个属性对应一个dep
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
@@ -153,16 +160,21 @@ export function defineReactive (
     val = obj[key]
   }
 
+  // 递归
   let childOb = !shallow && observe(val)
+  
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
+      // 依赖收集
       if (Dep.target) {
-        dep.depend()
+        dep.depend() // 追加依赖关系
         if (childOb) {
+          // 如果有子ob存在，接着追加依赖
           childOb.dep.depend()
+          // 如果是数组还要处理下数组
           if (Array.isArray(value)) {
             dependArray(value)
           }
@@ -187,7 +199,10 @@ export function defineReactive (
       } else {
         val = newVal
       }
+      // 用户新设置的值是一个原始值，然后现在又变成了一个对象
       childOb = !shallow && observe(newVal)
+
+      // 通知更新
       dep.notify()
     }
   })

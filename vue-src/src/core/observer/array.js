@@ -8,6 +8,8 @@ import { def } from '../util/index'
 const arrayProto = Array.prototype
 export const arrayMethods = Object.create(arrayProto)
 
+// 定义了7个方法，在vue中对这7个方法做了拦截
+// vue中还没有对数组索引进行拦截
 const methodsToPatch = [
   'push',
   'pop',
@@ -23,8 +25,11 @@ const methodsToPatch = [
  */
 methodsToPatch.forEach(function (method) {
   // cache original method
+  // 拦截，添加额外方法
+  // arrayMethods 
   const original = arrayProto[method]
   def(arrayMethods, method, function mutator (...args) {
+    // 执行原先任务
     const result = original.apply(this, args)
     const ob = this.__ob__
     let inserted
@@ -39,6 +44,7 @@ methodsToPatch.forEach(function (method) {
     }
     if (inserted) ob.observeArray(inserted)
     // notify change
+    // 执行通知更新
     ob.dep.notify()
     return result
   })
