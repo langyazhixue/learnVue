@@ -14,7 +14,10 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+// 入口文件核心代码
 const mount = Vue.prototype.$mount
+// 重新覆盖了之前的 $mount，扩充了之前默认的 $mount
+// 处理template和el选项，尝试编译它们为render函数 核心作用
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
@@ -31,11 +34,16 @@ Vue.prototype.$mount = function (
 
   const options = this.$options
   // resolve template/el and convert to render function
+  // 处理 el 和 template
+  // render 不存在时候才考虑 template 和 el,render的优先级 大于 template 大于 el
+
+
   if (!options.render) {
     let template = options.template
     if (template) {
       if (typeof template === 'string') {
         if (template.charAt(0) === '#') {
+          // template是选择器的情况
           template = idToTemplate(template)
           /* istanbul ignore if */
           if (process.env.NODE_ENV !== 'production' && !template) {
@@ -46,6 +54,8 @@ Vue.prototype.$mount = function (
           }
         }
       } else if (template.nodeType) {
+        // template 是 获取到的dom元素
+        // 比方说document.getElementById('app')
         template = template.innerHTML
       } else {
         if (process.env.NODE_ENV !== 'production') {
@@ -56,12 +66,14 @@ Vue.prototype.$mount = function (
     } else if (el) {
       template = getOuterHTML(el)
     }
+    
+    // 开始进行编译
     if (template) {
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
         mark('compile')
       }
-
+      // 将template字符串转换为render函数
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
@@ -69,6 +81,7 @@ Vue.prototype.$mount = function (
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
+      // 把渲染函数放在options中
       options.render = render
       options.staticRenderFns = staticRenderFns
 

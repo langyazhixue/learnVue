@@ -121,7 +121,7 @@ class Compile {
     node.value = value;
   }
   eventHandler(node, exp,dir) {
-    // 去调用methods中的方法
+    // 获取回调函数，去调用methods中的方法
     let vm = this.$vm
     let fn = vm.$options.methods && vm.$options.methods[exp]
     if(dir && fn) {

@@ -61,7 +61,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   Vue.options._base = Vue
 
   extend(Vue.options.components, builtInComponents)
-
+  // 插件</T>
   initUse(Vue)
   initMixin(Vue)
   initExtend(Vue)
