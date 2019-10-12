@@ -21,6 +21,7 @@ export default class Dep {
   }
 
   addSub (sub: Watcher) {
+    // 把 watcher 例子拿过来
     this.subs.push(sub)
   }
 
@@ -29,7 +30,10 @@ export default class Dep {
   }
 
   depend () {
+    // Dep.target 是一个watcher实例
     if (Dep.target) {
+      // 建立和 watcher 实例之间的关系，Dep 
+      // dep 跟 watcher 建立双向引用
       Dep.target.addDep(this)
     }
   }
@@ -44,6 +48,7 @@ export default class Dep {
       subs.sort((a, b) => a.id - b.id)
     }
     for (let i = 0, l = subs.length; i < l; i++) {
+      // 让 watcher去通知更新
       subs[i].update()
     }
   }
@@ -56,11 +61,13 @@ Dep.target = null
 const targetStack = []
 
 export function pushTarget (target: ?Watcher) {
+  // 给 Dep 静态属性 target 赋值一个 watcher
   targetStack.push(target)
   Dep.target = target
 }
 
 export function popTarget () {
+  // targetStack 中删除一个 Watcher实例
   targetStack.pop()
   Dep.target = targetStack[targetStack.length - 1]
 }

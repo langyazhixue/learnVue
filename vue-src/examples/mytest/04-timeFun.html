@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>数据响应化</title>
+</head>
+  
+  <body>
+    <h1> 阅读 Vue.js 源码 注释</h1>
+    <div id = 'app'>
+      <h1>异步更新</h1>
+      <p  id ='p1'>
+          {{foo}}
+      </p>
+    </div>
+  </body>
+  <script src='../../dist/vue.js'></script>
+  <script>
+    var  vm = new Vue({
+      el: '#app',
+      // template:document.getElementById('app'),
+      data:{
+        foo: 'XXXX'
+      },
+      mounted(){
+        p1 = document.getElementById('p1')
+        setTimeout(() => {
+          this.foo = '111'
+          this.foo = '222'
+          this.foo = '333'
+          this.foo = '444xw'
+          console.log(p1.innerHTML)
+          this.$nextTick(() => {
+            console.log(p1.innerHTML)
+          })
+        },1000)
+      }
+    })
+  </script>
+  </html>

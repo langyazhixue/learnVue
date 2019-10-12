@@ -105,7 +105,9 @@ export default class Watcher {
     let value
     const vm = this.vm
     try {
-      // 依赖收集
+      // 触发依赖收集
+      // 执行 updateComponent 函数
+      // vm._render函数执行，执行的时候会访问options.data 里面的数据，然后触发 options.data 对象的key的get 方法 
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -122,6 +124,7 @@ export default class Watcher {
       popTarget()
       this.cleanupDeps()
     }
+    // 返回什么？
     return value
   }
 
@@ -130,11 +133,14 @@ export default class Watcher {
    */
   addDep (dep: Dep) {
     const id = dep.id
+    
     if (!this.newDepIds.has(id)) {
+      // 把 dep 以及 depID 在 watcher 中记录一下
       this.newDepIds.add(id)
       this.newDeps.push(dep)
       // 跟 dep建立一个相互关系
       if (!this.depIds.has(id)) {
+
         dep.addSub(this)
       }
     }
@@ -172,6 +178,7 @@ export default class Watcher {
     } else if (this.sync) {
       this.run()
     } else {
+      // 更新是一个队列
       queueWatcher(this)
     }
   }

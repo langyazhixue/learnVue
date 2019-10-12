@@ -41,6 +41,7 @@ export function initRender (vm: Component) {
 
   /* istanbul ignore else */
   if (process.env.NODE_ENV !== 'production') {
+    // 对 vm 实例上的 $attrs 以及 $listeners 进行响应化处理
     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
       !isUpdatingChildComponent && warn(`$attrs is readonly.`, vm)
     }, true)
@@ -70,6 +71,9 @@ export function renderMixin (Vue: Class<Component>) {
 
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
+    // 得到 vm.$options 中的 render 函数，
+    // 在入口 src/platforms/web/entry-runtime-with-compiler.js，对template进行编译，得到render
+
     const { render, _parentVnode } = vm.$options
 
     if (_parentVnode) {
@@ -90,6 +94,10 @@ export function renderMixin (Vue: Class<Component>) {
       // separately from one another. Nested component's render fns are called
       // when parent component is patched.
       currentRenderingInstance = vm
+      // 执行vm.$createElement
+      // 触发了依赖收集
+      // 触发了 defineProperty 中 的 get 函数
+      // 返回vnode内容
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)

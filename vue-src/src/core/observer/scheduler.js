@@ -68,6 +68,7 @@ if (inBrowser && !isIE) {
 /**
  * Flush both queues and run the watchers.
  */
+// 异步跟新函数
 function flushSchedulerQueue () {
   currentFlushTimestamp = getNow()
   flushing = true
@@ -92,6 +93,7 @@ function flushSchedulerQueue () {
     }
     id = watcher.id
     has[id] = null
+    // 把队列中的都拿出来，然后执行run
     watcher.run()
     // in dev build, check and stop circular updates.
     if (process.env.NODE_ENV !== 'production' && has[id] != null) {
@@ -163,6 +165,9 @@ function callActivatedHooks (queue) {
  */
 export function queueWatcher (watcher: Watcher) {
   const id = watcher.id
+  // 首先判断去重，如果已经在队列中了，那么跳过
+  // 避免重复操作
+  //一个组件的 watcher 只进入队列一次就可以了 
   if (has[id] == null) {
     has[id] = true
     if (!flushing) {
@@ -177,6 +182,7 @@ export function queueWatcher (watcher: Watcher) {
       queue.splice(i + 1, 0, watcher)
     }
     // queue the flush
+    // 核心代码，
     if (!waiting) {
       waiting = true
 
@@ -184,6 +190,7 @@ export function queueWatcher (watcher: Watcher) {
         flushSchedulerQueue()
         return
       }
+      // 启动异步任务
       nextTick(flushSchedulerQueue)
     }
   }

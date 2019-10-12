@@ -39,6 +39,9 @@ let timerFunc
 // completely stops working after triggering a few times... so, if native
 // Promise is available, we will use it:
 /* istanbul ignore next, $flow-disable-line */
+
+// 1. 首选微任务执行异步操作：promise mutationobserver
+// 2. 次选 setImmediate setTimeout
 if (typeof Promise !== 'undefined' && isNative(Promise)) {
   const p = Promise.resolve()
   timerFunc = () => {
@@ -99,6 +102,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
   })
   if (!pending) {
     pending = true
+    // 启动异步函数
     timerFunc()
   }
   // $flow-disable-line

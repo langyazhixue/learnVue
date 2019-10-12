@@ -136,3 +136,5 @@ callHook(vm, 'created') // 在
 ```
 
 整个流程思维导图[Vue源码](https://processon.com/mindmap/5da02357e4b06b7d6ec79cde)
+
+* 初始化过程：init -> $mount -> compile -> new Watcher -> render -> update

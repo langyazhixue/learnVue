@@ -33,6 +33,7 @@ methodsToPatch.forEach(function (method) {
     const result = original.apply(this, args)
     const ob = this.__ob__
     let inserted
+    // 以下3个操作需要额外的响应化处理
     switch (method) {
       case 'push':
       case 'unshift':
@@ -42,10 +43,12 @@ methodsToPatch.forEach(function (method) {
         inserted = args.slice(2)
         break
     }
+    // 对新进来的元素进行响应化处理
     if (inserted) ob.observeArray(inserted)
     // notify change
     // 执行通知更新
     ob.dep.notify()
     return result
   })
+
 })

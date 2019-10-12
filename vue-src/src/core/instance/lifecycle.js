@@ -187,7 +187,9 @@ export function mountComponent (
       measure(`vue ${name} patch`, startTag, endTag)
     }
   } else {
+    // updateComponent 是一个更新组件的函数
     updateComponent = () => {
+      // vm._render(）是 options 参数中 render 函数的执行结果，返回的是虚拟DOM(VNode)
       vm._update(vm._render(), hydrating)
     }
   }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>数据响应化</title>
+</head>
+  
+  <body>
+    <h1> 阅读 Vue.js 源码 注释</h1>
+    <div id = 'app'>
+      {{foo.foo}}
+    </div>
+  </body>
+  <script src='../../dist/vue.js'></script>
+  <script>
+    var  vm = new Vue({
+      el: '#app',
+      // template:document.getElementById('app'),
+      data:{
+        foo: {
+          foo:'foo',
+          test:'test'
+        }
+      },
+      mounted(){
+        this.foo.foo = 'foooooo'
+      }
+    })
+  </script>
+  </html>

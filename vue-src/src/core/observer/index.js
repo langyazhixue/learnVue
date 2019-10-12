@@ -43,10 +43,13 @@ export class Observer {
 
   constructor (value: any) {
     this.value = value
+    // Observer 中的 Dep 关系最大的就是数组
     this.dep = new Dep()
     this.vmCount = 0
+    // 给 value 挂上一个 Observer
     def(value, '__ob__', this)
     // 当前对象是否是数组
+    // 数组的通知是靠value 上的 __ob__ 这个 Observer 去通知的
     if (Array.isArray(value)) {
       if (hasProto) {
         // 处理数组的原型
@@ -112,12 +115,21 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * returns the new observer if successfully observed,
  * or the existing observer if the value already has one.
  */
+// 返回一个 
 export function observe (value: any, asRootData: ?boolean): Observer | void {
   if (!isObject(value) || value instanceof VNode) {
     return
   }
   // __ob__
   let ob: Observer | void
+  /** 
+   * 判断value 对象中是否已经有一个 Observer 实例了，
+   * 如果有了 ob 就等于 value.__ob__,
+   * 不然 就 new 一个 新的 Observer 对象，分别对对象obj以及数组做分别处理
+   * 函数执行 walk函数
+   * 数组执行 observeArray  
+  */
+
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if (
@@ -148,6 +160,7 @@ export function defineReactive (
   // 一个属性对应一个dep
   const dep = new Dep()
 
+  // getOwnPropertyDescriptor 方法返回指定对象上一个自有属性对应的属性描述符
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
     return
@@ -157,6 +170,7 @@ export function defineReactive (
   const getter = property && property.get
   const setter = property && property.set
   if ((!getter || setter) && arguments.length === 2) {
+    // 得到初始 val 值
     val = obj[key]
   }
 
@@ -202,7 +216,7 @@ export function defineReactive (
       // 用户新设置的值是一个原始值，然后现在又变成了一个对象
       childOb = !shallow && observe(newVal)
 
-      // 通知更新
+      // 通知更新,进入队列
       dep.notify()
     }
   })

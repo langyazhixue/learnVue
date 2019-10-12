@@ -41,6 +41,7 @@ Vue.prototype.$mount = function (
   hydrating?: boolean
 ): Component {
   el = el && inBrowser ? query(el) : undefined
+  // this 指的是 vue 实例
   return mountComponent(this, el, hydrating)
 }
 
