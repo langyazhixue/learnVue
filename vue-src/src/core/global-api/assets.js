@@ -7,6 +7,8 @@ export function initAssetRegisters (Vue: GlobalAPI) {
   /**
    * Create asset registration methods.
    */
+  // 构造 VueComponent方法
+   // id 组件名称
   ASSET_TYPES.forEach(type => {
     Vue[type] = function (
       id: string,
@@ -21,11 +23,14 @@ export function initAssetRegisters (Vue: GlobalAPI) {
         }
         if (type === 'component' && isPlainObject(definition)) {
           definition.name = definition.name || id
+           // 组件构造函数创建VueComponent
+           // extend 继承规则
           definition = this.options._base.extend(definition)
         }
         if (type === 'directive' && typeof definition === 'function') {
           definition = { bind: definition, update: definition }
         }
+        // 注册组件components:{ Comp: Comp }
         this.options[type + 's'][id] = definition
         return definition
       }

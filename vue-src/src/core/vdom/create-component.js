@@ -33,7 +33,9 @@ import {
 } from 'weex/runtime/recycle-list/render-component-template'
 
 // inline hooks to be invoked on component VNodes during patch
+// 组件声明周期
 const componentVNodeHooks = {
+  // 组件实例化及挂载
   init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
     if (
       vnode.componentInstance &&
@@ -113,6 +115,7 @@ export function createComponent (
 
   // plain options object: turn it into a constructor
   if (isObject(Ctor)) {
+    // 在转一次
     Ctor = baseCtor.extend(Ctor)
   }
 
@@ -183,9 +186,13 @@ export function createComponent (
   }
 
   // install component management hooks onto the placeholder node
+  // 安装组件钩子函数
   installComponentHooks(data)
 
   // return a placeholder vnode
+  //  自定义组件的VNode
+  // cid 编号
+  // `vue-component-1-Comp
   const name = Ctor.options.name || tag
   const vnode = new VNode(
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
@@ -226,7 +233,8 @@ export function createComponentInstanceForVnode (
 function installComponentHooks (data: VNodeData) {
   const hooks = data.hook || (data.hook = {})
   for (let i = 0; i < hooksToMerge.length; i++) {
-    const key = hooksToMerge[i]
+    // 混入
+    const key = hooksToMerge[i] 
     const existing = hooks[key]
     const toMerge = componentVNodeHooks[key]
     if (existing !== toMerge && !(existing && existing._merged)) {
