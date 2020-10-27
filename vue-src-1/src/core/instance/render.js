@@ -31,6 +31,8 @@ export function initRender (vm: Component) {
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   // normalization is always applied for the public version, used in
   // user-written render functions.
+  // 这就是render 中的h函数
+  // 研究虚拟DOM 的入口点
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 
   // $attrs & $listeners are exposed for easier HOC creation.

@@ -5,7 +5,7 @@
 * packages
   * 服务端渲染
   * Weex
-* Bu -打包脚本
+* Script -打包脚本
 * s r c - 核心源码
   * c ompiler -编译器
   * co re- 核心代码

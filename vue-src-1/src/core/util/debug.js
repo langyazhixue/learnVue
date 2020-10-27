@@ -17,7 +17,6 @@ if (process.env.NODE_ENV !== 'production') {
 
   warn = (msg, vm) => {
     const trace = vm ? generateComponentTrace(vm) : ''
-
     if (config.warnHandler) {
       config.warnHandler.call(null, msg, vm, trace)
     } else if (hasConsole && (!config.silent)) {

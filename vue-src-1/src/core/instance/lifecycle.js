@@ -33,6 +33,7 @@ export function initLifecycle (vm: Component) {
   const options = vm.$options
 
   // locate first non-abstract parent
+  // 获取实例的父亲，然后把实例放到父亲的$children中去，把当前组件实例加入到父组件中去
   let parent = options.parent
   if (parent && !options.abstract) {
     while (parent.$options.abstract && parent.$parent) {
@@ -40,7 +41,7 @@ export function initLifecycle (vm: Component) {
     }
     parent.$children.push(vm)
   }
-
+  // 一些数据的初始化
   vm.$parent = parent
   vm.$root = parent ? parent.$root : vm
 

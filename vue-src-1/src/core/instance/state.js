@@ -111,6 +111,7 @@ function initProps (vm: Component, propsOptions: Object) {
 
 function initData (vm: Component) {
   let data = vm.$options.data
+  // 给 vm._data 挂载了 data选项
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
@@ -148,6 +149,7 @@ function initData (vm: Component) {
     }
   }
   // observe data
+  // 数据遍历开始
   observe(data, true /* asRootData */)
 }
 

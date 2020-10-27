@@ -49,23 +49,23 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
-    initLifecycle(vm)
-    initEvents(vm)
-    initRender(vm)
+    initLifecycle(vm) // 初始化 $parent $root $children $refs 
+    initEvents(vm) // 处理父组件传递的监听器
+    initRender(vm) // 处理额外的渲染 $slots $scopedSlots _c() $createElement()
     callHook(vm, 'beforeCreate')
-    initInjections(vm) // resolve injections before data/props
-    initState(vm)
-    initProvide(vm) // resolve provide after data/props
+    // 先获取注入的数据，再提供给后代，所以先initInjections，再initProvide（把我父辈的数据以及自己的数据都往下传）
+    initInjections(vm) // resolve injections before data/props 　获取注入的数据
+    initState(vm) //初始化组件中的　props,methods,data,computed watch
+    initProvide(vm) // resolve provide after data/props 提供数据注入
     callHook(vm, 'created')
-
     /* istanbul ignore if */
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
       vm._name = formatComponentName(vm, false)
       mark(endTag)
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
-
     if (vm.$options.el) {
+      // 如果el设置了，会自动执行$mount
       vm.$mount(vm.$options.el)
     }
   }

@@ -12,13 +12,29 @@
   </div>
   <script src='../../dist/vue.js'></script>
   <script>
-    new Vue({
+    console.log(Vue)
+    const vue= new Vue({
       el:'#app',
       template:'#app',
       data:{
-        test:'11'
+        test:'11',
+        obj:{
+          obj1:'11'
+        }
       }
     })
+    console.log(vue)
+
+    function VV () {
+
+    }
+    function initMixin(vv,data) {
+      const d = vv._data= {
+        test:1
+      }
+    }
+    initMixin(VV)
+    console.log(VV._data)
   </script>
 </body>
 </html>

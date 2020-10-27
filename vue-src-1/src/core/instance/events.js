@@ -13,8 +13,11 @@ export function initEvents (vm: Component) {
   vm._events = Object.create(null)
   vm._hasHookEvent = false
   // init parent attached events
+  // 拿出父组件上的事件监听器，事件谁派发谁监听
+  // <comp @click="onClick"></comp>
   const listeners = vm.$options._parentListeners
   if (listeners) {
+    // 统一做一个组件的监听器的附加，虽然在父组件声明，但是附加到当前的子组件中去
     updateComponentListeners(vm, listeners)
   }
 }

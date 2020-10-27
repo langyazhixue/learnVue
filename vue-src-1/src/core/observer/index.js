@@ -34,6 +34,8 @@ export function toggleObserving (value: boolean) {
  * object's property keys into getter/setters that
  * collect dependencies and dispatch updates.
  */
+
+ // 核心是判断当前对象是对象还是数组，从而用不同的方法去处理
 export class Observer {
   value: any;
   dep: Dep;
@@ -44,6 +46,7 @@ export class Observer {
     this.dep = new Dep()
     this.vmCount = 0
     def(value, '__ob__', this)
+    // 当前对象是否是数组
     if (Array.isArray(value)) {
       if (hasProto) {
         protoAugment(value, arrayMethods)
@@ -80,6 +83,7 @@ export class Observer {
 
 // helpers
 
+ 
 /**
  * Augment a target Object or Array by intercepting
  * the prototype chain using __proto__
@@ -112,6 +116,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     return
   }
   let ob: Observer | void
+  // instanceof 用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if (
@@ -152,7 +157,7 @@ export function defineReactive (
   if ((!getter || setter) && arguments.length === 2) {
     val = obj[key]
   }
-
+  // 递归
   let childOb = !shallow && observe(val)
   Object.defineProperty(obj, key, {
     enumerable: true,
