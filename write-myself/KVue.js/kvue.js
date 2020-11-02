@@ -25,16 +25,16 @@ class KVue {
        // 执行代理
        this.proxyData(key)
     })
-
   }
 
   defineReactive(obj, key, val) {
     // 递归判断
-    if(typeof val === 'object') {
-      this.observe(val)
-      return 
-    }
+    // if(typeof val === 'object') {
+    //   this.observe(val)
+    //   return 
+    // }
 
+    this.observe(val);
     // 创建 Dep, 它跟 key 1:1 关系
     const dep = new Dep();
 
@@ -51,7 +51,7 @@ class KVue {
           return
         }
         // 在 set 的时候触发dep的notify来通知所有的watcher对象更新视图
-        val = newVal //  必包
+        val = newVal // 必包
         dep.notify()
         console.log(key + '变化', val, ' -> ', newVal)
       }
@@ -90,20 +90,21 @@ class Dep {
   }
 }
 // watcher:执行具体的更新操作
-
+var watcherId = 0
 class Watcher {
   // 得知道是跟哪个实例相关联，还有哪个key
   constructor(vm,key,updater){
     this.vm = vm
+    this.watcherId = watcherId++
     this.key = key
     this.updater = updater // 有个更新函数
     Dep.target = this // 依赖收集时候要用到 // Dep 的静态属性
     this.vm[this.key] //  自己访问一次，触发收集
-    Dep.target = null 
+    Dep.target = null  
   }
 
   update(){
     console.log(`属性${this.key}更新了1`)
-    this.updater.call(this.vm,this.vm[this.key])
+     this.updater.call(this.vm,this.vm[this.key])
   }
 }

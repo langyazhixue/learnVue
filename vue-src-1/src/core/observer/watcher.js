@@ -23,6 +23,7 @@ let uid = 0
  * and fires callback when the expression value changes.
  * This is used for both the $watch() api and directives.
  */
+// vue2.0中，一个组件只有一个wathcer实例，除非这个组件用户还写了很多watch 选项
 export default class Watcher {
   vm: Component;
   expression: string;
@@ -77,8 +78,10 @@ export default class Watcher {
       : ''
     // parse expression for getter
     if (typeof expOrFn === 'function') {
+      // 
       this.getter = expOrFn
     } else {
+      // expOrFn如果不是函数，说明是用户设置的watch选项，把用户写的字符串转换成更新函数
       this.getter = parsePath(expOrFn)
       if (!this.getter) {
         this.getter = noop
@@ -92,7 +95,7 @@ export default class Watcher {
     }
     this.value = this.lazy
       ? undefined
-      : this.get()
+      : this.get() // 创建watcher的时候，调用get进行依赖收集
   }
 
   /**
@@ -103,6 +106,8 @@ export default class Watcher {
     let value
     const vm = this.vm
     try {
+      // 如果是更新函数，会执行render函数，render 中用到的data中的值都会出发get函数，从而进行依赖收集
+      // 触发依赖收集
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -129,8 +134,10 @@ export default class Watcher {
     const id = dep.id
     if (!this.newDepIds.has(id)) {
       this.newDepIds.add(id)
+      // watcher 保存 dep
       this.newDeps.push(dep)
       if (!this.depIds.has(id)) {
+        // dep 保存watcher
         dep.addSub(this)
       }
     }

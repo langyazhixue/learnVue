@@ -36,6 +36,7 @@ export function toggleObserving (value: boolean) {
  */
 
  // 核心是判断当前对象是对象还是数组，从而用不同的方法去处理
+ // 如果是对象就会有一个Observer实例与之对应，这对象包括数组和普通对象，对象发生了嵌套，也会有一个Observer与之伴随
 export class Observer {
   value: any;
   dep: Dep;
@@ -145,7 +146,6 @@ export function defineReactive (
   shallow?: boolean
 ) {
   const dep = new Dep()
-
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
     return
@@ -159,16 +159,21 @@ export function defineReactive (
   }
   // 递归
   let childOb = !shallow && observe(val)
+  // 定义数据的拦截
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
       const value = getter ? getter.call(obj) : val
+      // 依赖收集
       if (Dep.target) {
-        dep.depend()
+        dep.depend() // 追加依赖关系
+        // childOb 如果有子的Ob存在
         if (childOb) {
           childOb.dep.depend()
+          // 如果是数组还要继续处理
           if (Array.isArray(value)) {
+            // 把数组中的每一项都追加依赖
             dependArray(value)
           }
         }
@@ -192,7 +197,9 @@ export function defineReactive (
       } else {
         val = newVal
       }
+      // 如果用户设置的值是对象，还需要额外处理
       childOb = !shallow && observe(newVal)
+      // 通知更新
       dep.notify()
     }
   })

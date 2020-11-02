@@ -78,7 +78,6 @@ Vue.prototype.$mount = function (
       // 把render（渲染函数） 设置到选项中
       options.render = render
       options.staticRenderFns = staticRenderFns
-
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
         mark('compile end')
