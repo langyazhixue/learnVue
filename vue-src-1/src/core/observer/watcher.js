@@ -23,6 +23,7 @@ let uid = 0
  * and fires callback when the expression value changes.
  * This is used for both the $watch() api and directives.
  */
+// fires callback 触发回调
 // vue2.0中，一个组件只有一个wathcer实例，除非这个组件用户还写了很多watch 选项
 export default class Watcher {
   vm: Component;
