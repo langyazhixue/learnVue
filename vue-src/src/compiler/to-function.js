@@ -11,6 +11,7 @@ type CompiledFunctionResult = {
 
 function createFunction (code, errors) {
   try {
+    // 执行 code 代码
     return new Function(code)
   } catch (err) {
     errors.push({ err, code })
@@ -49,6 +50,8 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // check cache
+    // 编译结果的缓存，提高后面的编译结果
+
     const key = options.delimiters
       ? String(options.delimiters) + template
       : template
@@ -90,6 +93,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     // turn code into functions
     const res = {}
     const fnGenErrors = []
+    // 转换为 函数
     res.render = createFunction(compiled.render, fnGenErrors)
     res.staticRenderFns = compiled.staticRenderFns.map(code => {
       return createFunction(code, fnGenErrors)

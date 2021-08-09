@@ -43,8 +43,10 @@ export class Observer {
   vmCount: number; // number of vms that have this object as root $data
   constructor (value: any) {
     this.value = value
+    // 实例化一个dep
     this.dep = new Dep()
     this.vmCount = 0
+    // 给value增加一个__ob__属性
     def(value, '__ob__', this)
     // 当前对象是否是数组
     if (Array.isArray(value)) {
@@ -118,6 +120,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
   let ob: Observer | void
   // instanceof 用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
+    // 如果这个对象已经被数据劫持过了
     ob = value.__ob__
   } else if (
     shouldObserve &&
@@ -142,8 +145,9 @@ export function defineReactive (
   key: string,
   val: any,
   customSetter?: ?Function,
-  shallow?: boolean
+  shallow?: boolean // 深还是浅
 ) {
+  // 实例化一个dep
   const dep = new Dep()
   const property = Object.getOwnPropertyDescriptor(obj, key)
   if (property && property.configurable === false) {
@@ -156,7 +160,7 @@ export function defineReactive (
   if ((!getter || setter) && arguments.length === 2) {
     val = obj[key]
   }
-  // 递归
+  // 递归 // shallow：true 浅响应化
   let childOb = !shallow && observe(val)
   // 定义数据的拦截
   Object.defineProperty(obj, key, {

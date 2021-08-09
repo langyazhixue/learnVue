@@ -10,10 +10,7 @@
   <body>
     <h1> 阅读 Vue.js 源码 注释</h1>
     <div id = 'app'>
-      <h1>异步更新</h1>
-      <p  id ='p1'>
-          {{foo}}
-      </p>
+     <Comp></Comp>
     </div>
   </body>
   <script src='../../dist/vue.js'></script>
@@ -23,14 +20,11 @@
     // 3. 组件怎么初始化
     // 4. 组件怎么挂载
     Vue.component('Comp',{
-      template:'<div>I am comp</div>'
+      template:'<div id = "comp">I am comp</div>'
     })
     var  vm = new Vue({
       el: '#app',
       template:document.getElementById('app'),
-      data:{
-        foo: 'XXXX'
-      },
       // components:{
       //   Comp:
       // }

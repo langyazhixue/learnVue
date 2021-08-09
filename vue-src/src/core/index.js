@@ -5,6 +5,7 @@ import { FunctionalRenderContext } from 'core/vdom/create-functional-component'
 
 // 定义全局API
 //  $set $delete $component
+// 执行全局API
 initGlobalAPI(Vue)
 
 Object.defineProperty(Vue.prototype, '$isServer', {

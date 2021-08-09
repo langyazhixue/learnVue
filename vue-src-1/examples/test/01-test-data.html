@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+      <div>{{student.name}}</div>
+      <button @click='hanlderSetStudentName'>SetStudentName</button>
+      <button @click='hanlderSetStudent'>SetStudent</button>
+  </div>
+  <script src='../../dist/vue.js'></script>
+  <script>
+    // 测试 vue data 数据劫持
+    // src/core/observer/index
+    const vm = new Vue({
+      el:'#app',
+      data:{
+        student:{
+          name:'hangzhou'
+        }
+      },
+      methods:{
+        hanlderSetStudentName(){
+
+          // 1.先走 Object.defineProperty(obj,val) reactiveGetter
+             // 1. obj {student:{name:hangzhou}}}
+
+          // 2.再走 Object.defineProperty(obj,val) reactiveSetter
+              // 1. obj {name:shanghai}}
+          // 3.再走  Object.defineProperty(obj,val) reactiveGetter
+            // 1. obj {student:{name:shanghai}}
+          // 4.再走 Object.defineProperty(obj,val) reactiveGetter
+            // obj {name:shanghai}} //页面被更新
+            this.student.name = 'shanghai'
+          // let student = this.student
+          // student.name = 'shanghai'
+        },
+        hanlderSetStudent(){
+          this.student = {
+            sex:'boy'
+          }
+        }
+      }
+    })
+
+
+  </script>
+
+</body>
+</html>

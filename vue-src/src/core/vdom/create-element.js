@@ -95,6 +95,7 @@ export function _createElement (
   let vnode, ns
   // 根据标签执行响应操作
   if (typeof tag === 'string') {
+    // debugger
     let Ctor
     ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
     // 判断是否是保留标签
@@ -111,9 +112,11 @@ export function _createElement (
         undefined, undefined, context
       )
     } else if ((!data || !data.pre) && isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+      // debugger
       // Ctor = resolveAsset(context.$options, 'components', tag) 拿到构造函数
       // component
       // 自定义组件创建
+      // 根据选项的render 函数，可以得到虚拟 VNode
       vnode = createComponent(Ctor, data, context, children, tag)
     } else {
       // unknown or unlisted namespaced elements
@@ -126,11 +129,14 @@ export function _createElement (
     }
   } else {
     // direct component options / constructor
+    // 传进来是组件的构造函数
     vnode = createComponent(tag, data, context, children)
   }
+  // 返回虚拟节点
   if (Array.isArray(vnode)) {
     return vnode
   } else if (isDef(vnode)) {
+    // applyNS 命名空间有关
     if (isDef(ns)) applyNS(vnode, ns)
     if (isDef(data)) registerDeepBindings(data)
     return vnode

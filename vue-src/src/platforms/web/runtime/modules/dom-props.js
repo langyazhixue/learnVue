@@ -6,6 +6,7 @@ import { isSVG } from 'web/util/index'
 let svgContainer
 
 function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
+  // debugger
   if (isUndef(oldVnode.data.domProps) && isUndef(vnode.data.domProps)) {
     return
   }

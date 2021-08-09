@@ -23,8 +23,9 @@ export function initAssetRegisters (Vue: GlobalAPI) {
         }
         if (type === 'component' && isPlainObject(definition)) {
           definition.name = definition.name || id
-           // 组件构造函数创建VueComponent
+           // 组件构造 函数 创建 VueComponent
            // extend 继承规则
+           // this.options._base = vue
           definition = this.options._base.extend(definition)
         }
         if (type === 'directive' && typeof definition === 'function') {

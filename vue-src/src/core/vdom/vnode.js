@@ -41,6 +41,7 @@ export default class VNode {
   ) {
     this.tag = tag
     this.data = data
+    // children 根  text 是 互相排斥的
     this.children = children
     this.text = text
     this.elm = elm

@@ -50,10 +50,13 @@ const componentVNodeHooks = {
         vnode,
         activeInstance
       )
+      // debugger
+      // 子组件进行挂载操作
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     }
   },
 
+  // 打补丁之前要做的事情
   prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
     const options = vnode.componentOptions
     const child = vnode.componentInstance = oldVnode.componentInstance
@@ -100,6 +103,7 @@ const componentVNodeHooks = {
 
 const hooksToMerge = Object.keys(componentVNodeHooks)
 
+// 组件 生成 VNode 
 export function createComponent (
   Ctor: Class<Component> | Function | Object | void,
   data: ?VNodeData,
@@ -155,6 +159,8 @@ export function createComponent (
 
   // transform component v-model data into props & events
   if (isDef(data.model)) {
+    // 对于V-model 的处理
+    // debugger
     transformModel(Ctor.options, data)
   }
 
@@ -200,7 +206,7 @@ export function createComponent (
     { Ctor, propsData, listeners, tag, children },
     asyncFactory
   )
-
+  // debugger
   // Weex specific: invoke recycle-list optimized @render function for
   // extracting cell-slot template.
   // https://github.com/Hanks10100/weex-native-directive/tree/master/component
@@ -223,14 +229,17 @@ export function createComponentInstanceForVnode (
   }
   // check inline-template render functions
   const inlineTemplate = vnode.data.inlineTemplate
+  // debugger
   if (isDef(inlineTemplate)) {
     options.render = inlineTemplate.render
     options.staticRenderFns = inlineTemplate.staticRenderFns
   }
+  // 执行 new VueComponent // extend 构造函数 new 
   return new vnode.componentOptions.Ctor(options)
 }
 
 function installComponentHooks (data: VNodeData) {
+  // 里面设置了生命周期的事情
   const hooks = data.hook || (data.hook = {})
   for (let i = 0; i < hooksToMerge.length; i++) {
     // 混入

@@ -79,6 +79,7 @@ export default class Watcher {
       : ''
     // parse expression for getter
     if (typeof expOrFn === 'function') {
+      // getter 就是这个函数
       this.getter = expOrFn
     } else {
       this.getter = parsePath(expOrFn)
@@ -132,15 +133,17 @@ export default class Watcher {
    * Add a dependency to this directive.
    */
   addDep (dep: Dep) {
+    // 把 Dep 加 到 watcher 中
     const id = dep.id
-    
     if (!this.newDepIds.has(id)) {
       // 把 dep 以及 depID 在 watcher 中记录一下
-      this.newDepIds.add(id)
+      // Dep 类 中有 id 是 唯一值
+      // watcher 只有一个，但是 因为多次读取，所以 Dep有多个
+      this.newDepIds.add(id) // depIds set 
       this.newDeps.push(dep)
       // 跟 dep建立一个相互关系
       if (!this.depIds.has(id)) {
-
+        // 在 Dep 中 添加 watcher 
         dep.addSub(this)
       }
     }
@@ -189,6 +192,7 @@ export default class Watcher {
    */
   run () {
     if (this.active) {
+      // 执行 函数操作, vm.$el = vm.__patch__(prevVnode, vnode)
       const value = this.get()
       if (
         value !== this.value ||

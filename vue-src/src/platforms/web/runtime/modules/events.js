@@ -44,6 +44,7 @@ function createOnceHandler (event, handler, capture) {
 // safe to exclude.
 const useMicrotaskFix = isUsingMicroTask && !(isFF && Number(isFF[1]) <= 53)
 
+// 添加事件监听器
 function add (
   name: string,
   handler: Function,
@@ -103,6 +104,7 @@ function remove (
 }
 
 function updateDOMListeners (oldVnode: VNodeWithData, vnode: VNodeWithData) {
+  // debugger
   if (isUndef(oldVnode.data.on) && isUndef(vnode.data.on)) {
     return
   }

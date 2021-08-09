@@ -23,16 +23,20 @@ export function initRender (vm: Component) {
   const parentVnode = vm.$vnode = options._parentVnode // the placeholder node in parent tree
   const renderContext = parentVnode && parentVnode.context
   // 需要额外渲染的插槽
+  // vm.$slots  生成默认插槽
   vm.$slots = resolveSlots(options._renderChildren, renderContext)
+  // vm.$scopedSlots  生成具名插槽，作用域插槽
   vm.$scopedSlots = emptyObject
   // bind the createElement fn to this instance
   // so that we get proper render context inside it.
   // args order: tag, data, children, normalizationType, alwaysNormalize
   // internal version is used by render functions compiled from templates
+  //  给编译器生成的render函数去使用的
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   // normalization is always applied for the public version, used in
   // user-written render functions.
   //  这就是render(h)里面的 h 函数 
+  // 给用户使用的
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 
   // $attrs & $listeners are exposed for easier HOC creation.

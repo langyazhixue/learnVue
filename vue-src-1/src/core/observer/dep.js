@@ -16,6 +16,7 @@ export default class Dep {
   subs: Array<Watcher>;
 
   constructor () {
+    // 实例化多少个Dep,id 就要增加
     this.id = uid++
     this.subs = []
   }
@@ -36,7 +37,7 @@ export default class Dep {
       Dep.target.addDep(this)
     }
   }
-
+  // 通知更新
   notify () {
     // stabilize the subscriber list first
     const subs = this.subs.slice()
@@ -44,6 +45,7 @@ export default class Dep {
       // subs aren't sorted in scheduler if not running async
       // we need to sort them now to make sure they fire in correct
       // order
+      // a.id - b.id < 0 则不交换位置，升序
       subs.sort((a, b) => a.id - b.id)
     }
     for (let i = 0, l = subs.length; i < l; i++) {
@@ -59,11 +61,13 @@ Dep.target = null
 const targetStack = []
 
 export function pushTarget (target: ?Watcher) {
+  // targetStack 目标栈加入新目标，修改 Dep.target
   targetStack.push(target)
   Dep.target = target
 }
 
 export function popTarget () {
+   // targetStack 目标栈删除并返回数组的最后一个元素，修改 Dep.target 为目前数组的最后一个
   targetStack.pop()
   Dep.target = targetStack[targetStack.length - 1]
 }

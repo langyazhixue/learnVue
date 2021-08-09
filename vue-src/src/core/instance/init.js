@@ -33,6 +33,7 @@ export function initMixin (Vue: Class<Component>) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
+      // 给子组件 增加 一些 父组件 的信息 slot
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
@@ -49,7 +50,7 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
-    initLifecycle(vm)  // 声明周期的初始化 $parent, $root,$children,$refs
+    initLifecycle(vm)  // 声明周期的初始化 $parent, $root,$children,$refs 的初始化
     initEvents(vm) // 事件的初始化 处理父组件的监听器
     initRender(vm) // 渲染器的初始化 $slots, $scopedSlots, _c(), $createElement()函数声明
     callHook(vm, 'beforeCreate')
@@ -67,17 +68,19 @@ export function initMixin (Vue: Class<Component>) {
 
     // 关键语句，如果 el 设置了，会自动帮你执行 挂载
     if (vm.$options.el) {
-
       vm.$mount(vm.$options.el)
     }
   }
 }
 
+// 定义父组件传递下来给自组件的值
 export function initInternalComponent (vm: Component, options: InternalComponentOptions) {
   const opts = vm.$options = Object.create(vm.constructor.options)
   // doing this because it's faster than dynamic enumeration.
   const parentVnode = options._parentVnode
+  // parent 是指 父构造函数实例
   opts.parent = options.parent
+  // _parentVnode 父生成的Vnode
   opts._parentVnode = parentVnode
 
   const vnodeComponentOptions = parentVnode.componentOptions

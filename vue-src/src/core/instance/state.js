@@ -150,7 +150,6 @@ function initData (vm: Component) {
   }
   // observe data
   // 数据遍历开始
-  
   observe(data, true /* asRootData */)
 }
 

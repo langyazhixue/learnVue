@@ -59,7 +59,9 @@ export function initLifecycle (vm: Component) {
 export function lifecycleMixin (Vue: Class<Component>) {
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
+  
     const prevEl = vm.$el
+      // 获取上次的虚拟节点
     const prevVnode = vm._vnode
     const restoreActiveInstance = setActiveInstance(vm)
     vm._vnode = vnode
@@ -67,6 +69,8 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // based on the rendering backend used.
     if (!prevVnode) {
       // initial render
+      // 初始化阶段
+      // 初始化的时候传入的是真实DOM
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
       // updates
@@ -190,6 +194,7 @@ export function mountComponent (
     // updateComponent 是一个更新组件的函数
     updateComponent = () => {
       // vm._render(）是 options 参数中 render 函数的执行结果，返回的是虚拟DOM(VNode)
+      // update 把虚拟DOM 变成真实DOM
       vm._update(vm._render(), hydrating)
     }
   }

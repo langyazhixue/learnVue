@@ -14,6 +14,7 @@ export function initEvents (vm: Component) {
   vm._hasHookEvent = false
   // init parent attached events
   const listeners = vm.$options._parentListeners
+
   if (listeners) {
     updateComponentListeners(vm, listeners)
   }
@@ -22,6 +23,7 @@ export function initEvents (vm: Component) {
 let target: any
 
 function add (event, fn) {
+
   target.$on(event, fn)
 }
 
