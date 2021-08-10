@@ -269,6 +269,7 @@ export function createPatchFunction (backend) {
     }
   }
 
+    // keep-alive 组件的声明周期钩子函数
   function reactivateComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
     let i
     // hack for #4339: a reactivated component with inner transition
@@ -623,7 +624,10 @@ export function createPatchFunction (backend) {
       if (isDef(i = data.hook) && isDef(i = i.postpatch)) i(oldVnode, vnode)
     }
   }
-
+  
+  //  触发 VNODE 钩子函数 insert
+  // 虚拟 DOM 在渲染 时候会触发的所有钩子函数
+  // 1. init 2 create 3 activate 4 insert 5 prepatch 6 update 7 postpatch 8 destory 9 remove
   function invokeInsertHook (vnode, queue, initial) {
     // delay insert hooks for component root nodes, invoke them after the
     // element is really inserted

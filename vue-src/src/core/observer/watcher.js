@@ -230,6 +230,8 @@ export default class Watcher {
   /**
    * Depend on all deps collected by this watcher.
    */
+  // 在 所有Dep 中，把 目前 的watcher 收集一次
+  // 在 computed 中，就是把computed 中的　watcher加入到 所有的dep 中
   depend () {
     let i = this.deps.length
     while (i--) {

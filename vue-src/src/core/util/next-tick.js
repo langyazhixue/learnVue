@@ -102,7 +102,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
   })
   if (!pending) {
     pending = true
-    // 启动异步函数
+    // 启动异步函数,但是并不会马上执行
     timerFunc()
   }
   // $flow-disable-line

@@ -145,6 +145,8 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
+      // vm._data.key =  vm.$data.key
+      // vm.key = vm._data.key
       proxy(vm, `_data`, key)
     }
   }
@@ -198,6 +200,11 @@ function initComputed (vm: Component, computed: Object) {
     // component prototype. We only need to define computed properties defined
     // at instantiation here.
     if (!(key in vm)) {
+      // 在 vm 上 给 key 做数据响应式，当这个值被修改的时候，get 返回 watcher.value
+      // computedGetter
+      // 在 computed 中，就是把computed 中的　watcher加入到 所有的dep 中,
+      // 当任何属性发生变化的时候 computed watcher都能得到通知， update dirty 变成 true
+      // 而且组件会重新渲染，然后vm 上的 compute 属性的 get 会重新计算，dirty 变成false
       defineComputed(vm, key, userDef)
     } else if (process.env.NODE_ENV !== 'production') {
       if (key in vm.$data) {

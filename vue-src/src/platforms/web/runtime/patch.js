@@ -2,6 +2,7 @@
 
 import * as nodeOps from 'web/runtime/node-ops'
 import { createPatchFunction } from 'core/vdom/patch'
+// 把 指令 和 ref 的 功能也集中起来了
 import baseModules from 'core/vdom/modules/index'
 import platformModules from 'web/runtime/modules/index'
 

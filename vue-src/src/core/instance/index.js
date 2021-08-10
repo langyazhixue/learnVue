@@ -18,7 +18,7 @@ function Vue (options) {
 initMixin(Vue) // 实现了 _init
 stateMixin(Vue) // 实现了 $props,$watch,$data,$set
 eventsMixin(Vue) // $on,$emit,$once,$off
-lifecycleMixin(Vue)
-renderMixin(Vue)
+lifecycleMixin(Vue) // $mount, $destory, $forceUpdate, $nextTick
+renderMixin(Vue) // $nextTick // render
 
 export default Vue

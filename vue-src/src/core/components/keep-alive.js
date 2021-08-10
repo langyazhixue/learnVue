@@ -96,7 +96,7 @@ export default {
       ) {
         return vnode
       }
-
+      
       const { cache, keys } = this
       const key: ?string = vnode.key == null
         // same constructor may get registered as different local components
@@ -116,7 +116,6 @@ export default {
           pruneCacheEntry(cache, keys[0], keys, this._vnode)
         }
       }
-
       vnode.data.keepAlive = true
     }
     return vnode || (slot && slot[0])
