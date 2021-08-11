@@ -164,6 +164,7 @@ export function createMatcher (
     return createRoute(record, location, redirectedFrom, router)
   }
 
+  // 返回一个,match
   return {
     match,
     addRoutes

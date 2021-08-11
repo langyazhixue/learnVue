@@ -4,6 +4,11 @@
  * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
  * @param {Object}
  */
+// Vue 辅助函数详解
+// /state辅助函数 name:命名空间 states:比如:count2: "count"
+// //将states转换为对象格式，例如:[{key:count2,val:count}]
+  var res = {};
+  normalizeMap(states).forEach(function (ref) {  
 export const mapState = normalizeNamespace((namespace, states) => {
   const res = {}
   normalizeMap(states).forEach(({ key, val }) => {

@@ -4,7 +4,7 @@ import ModuleCollection from './module/module-collection'
 import { forEachValue, isObject, isPromise, assert, partial } from './util'
 
 let Vue // bind on install
-
+// state也就是vuex里的值，也即是整个vuex的状态，而strict和state的设置有关，如果设置strict为true，那么不能直接修改state里的值，只能通过mutation来设置
 export class Store {
   constructor (options = {}) {
     // Auto install if it is not done yet and `window` has `Vue`.
@@ -31,6 +31,7 @@ export class Store {
     this._actionSubscribers = []
     this._mutations = Object.create(null)
     this._wrappedGetters = Object.create(null)
+    // /初始化modules,ModuleCollection对象是收集所有模块信息的
     this._modules = new ModuleCollection(options)
     this._modulesNamespaceMap = Object.create(null)
     this._subscribers = []
@@ -39,9 +40,11 @@ export class Store {
     // bind commit and dispatch to self
     const store = this
     const { dispatch, commit } = this
+    // //重写dispatch方法，将上下文设置为当前的this实例
     this.dispatch = function boundDispatch (type, payload) {
       return dispatch.call(store, type, payload)
     }
+    // 重写commit方法，将上下文设置为当前的this实例
     this.commit = function boundCommit (type, payload, options) {
       return commit.call(store, type, payload, options)
     }
@@ -54,10 +57,14 @@ export class Store {
     // init root module.
     // this also recursively registers all sub-modules
     // and collects all module getters inside this._wrappedGetters
+    // //安装根模块，该函数会递归调用的安装子模块，并收集它们的getters到this._wrappendGetters属性上
+
     installModule(this, state, [], this._modules.root)
 
     // initialize the store vm, which is responsible for the reactivity
     // (also registers _wrappedGetters as computed properties)
+    //安装vm，也就是这里会创建一个vue实例，并把state、getter作为响应式对象
+
     resetStoreVM(this, state)
 
     // apply plugins
@@ -69,6 +76,7 @@ export class Store {
     }
   }
 
+  // 设置属性的get 
   get state () {
     return this._vm._data.$$state
   }
@@ -88,6 +96,7 @@ export class Store {
     } = unifyObjectStyle(_type, _payload, _options)
 
     const mutation = { type, payload }
+    // 把 _mutations 里面的值 拿出来执行
     const entry = this._mutations[type]
     if (!entry) {
       if (process.env.NODE_ENV !== 'production') {
@@ -113,6 +122,7 @@ export class Store {
     }
   }
 
+  // 执行 actions 中的函数
   dispatch (_type, _payload) {
     // check object-style dispatch
     const {
@@ -269,7 +279,9 @@ function resetStoreVM (store, state, hot) {
   // suppress warnings just in case the user has added
   // some funky global mixins
   const silent = Vue.config.silent
+  // 先关闭警告,gettter
   Vue.config.silent = true
+  // 给 store 挂上 vue ,把 state 
   store._vm = new Vue({
     data: {
       $$state: state
@@ -279,6 +291,9 @@ function resetStoreVM (store, state, hot) {
   Vue.config.silent = silent
 
   // enable strict mode for new vm
+  ////初始化Strore时，如果给strict传入了true
+  // //则调用enableStrictMode()函数
+  enableStrictMode(store);                       
   if (store.strict) {
     enableStrictMode(store)
   }
@@ -304,6 +319,7 @@ function installModule (store, rootState, path, module, hot) {
     if (store._modulesNamespaceMap[namespace] && process.env.NODE_ENV !== 'production') {
       console.error(`[vuex] duplicate namespace ${namespace} for the namespaced module ${path.join('/')}`)
     }
+    // 安装命名空间模块
     store._modulesNamespaceMap[namespace] = module
   }
 
@@ -323,6 +339,7 @@ function installModule (store, rootState, path, module, hot) {
     registerMutation(store, namespacedType, mutation, local)
   })
 
+  // 注册 action
   module.forEachAction((action, key) => {
     const type = action.root ? key : namespace + key
     const handler = action.handler || action
@@ -333,7 +350,7 @@ function installModule (store, rootState, path, module, hot) {
     const namespacedType = namespace + key
     registerGetter(store, namespacedType, getter, local)
   })
-
+  // 子 模块的模块注册
   module.forEachChild((child, key) => {
     installModule(store, rootState, path.concat(key), child, hot)
   })
@@ -420,6 +437,7 @@ function makeLocalGetters (store, namespace) {
 }
 
 function registerMutation (store, type, handler, local) {
+  // store._mutations = []
   const entry = store._mutations[type] || (store._mutations[type] = [])
   entry.push(function wrappedMutationHandler (payload) {
     handler.call(store, local.state, payload)
@@ -427,7 +445,9 @@ function registerMutation (store, type, handler, local) {
 }
 
 function registerAction (store, type, handler, local) {
+  // store._actions=[]
   const entry = store._actions[type] || (store._actions[type] = [])
+  // 用一个函数包裹，把参数传递进去
   entry.push(function wrappedActionHandler (payload, cb) {
     let res = handler.call(store, {
       dispatch: local.dispatch,
@@ -468,6 +488,9 @@ function registerGetter (store, type, rawGetter, local) {
   }
 }
 
+//也就是调用vue.$watch去观察 this._data.$$state的变化，
+// 也就是vuex里的state的变化，如果有变化且store._committing不为true则报错
+// store._committing是vuex里的一个属性，如果是通过mutation修改state时就会设置store._committing为true,否则store._committing为false
 function enableStrictMode (store) {
   store._vm.$watch(function () { return this._data.$$state }, () => {
     if (process.env.NODE_ENV !== 'production') {
