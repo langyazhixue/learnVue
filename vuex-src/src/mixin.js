@@ -7,6 +7,7 @@ export default function (Vue) {
     // override init and inject vuex init procedure
     // for 1.x backwards compatibility.
     const _init = Vue.prototype._init
+    // 在 prototype init 方法 上 去
     Vue.prototype._init = function (options = {}) {
       options.init = options.init
         ? [vuexInit].concat(options.init)
@@ -27,6 +28,7 @@ export default function (Vue) {
         ? options.store()
         : options.store
     } else if (options.parent && options.parent.$store) {
+      // 用 options.parent parent 向下传递
       this.$store = options.parent.$store
     }
   }

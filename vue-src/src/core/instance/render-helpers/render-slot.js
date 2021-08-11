@@ -28,7 +28,7 @@ export function renderSlot (
   } else {
     nodes = this.$slots[name] || fallback
   }
-
+  
   const target = props && props.slot
   if (target) {
     return this.$createElement('template', { slot: target }, nodes)

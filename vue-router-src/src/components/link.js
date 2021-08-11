@@ -32,11 +32,16 @@ export default {
       default: 'click'
     }
   },
+  //router-link组件对应的render函数   h等于大vue上的$createElement函数
   render (h: Function) {
+    // //获取$router实例
     const router = this.$router
+    // 当前的路由对象 
     const current = this.$route
     const { location, route, href } = router.resolve(
+      // 要去的地址
       this.to,
+      // 目前的地址
       current,
       this.append
     )
@@ -72,11 +77,13 @@ export default {
         if (this.replace) {
           router.replace(location, noop)
         } else {
+          // 用 push 更新导航
           router.push(location, noop)
         }
       }
     }
 
+    // 给 组件绑定上 click 事件 ，$on $event
     const on = { click: guardEvent }
     if (Array.isArray(this.event)) {
       this.event.forEach(e => {
@@ -150,7 +157,7 @@ export default {
         data.on = on
       }
     }
-
+    // 用 会 函数 渲染出 VNODE 
     return h(this.tag, data, this.$slots.default)
   }
 }

@@ -13,6 +13,7 @@ import {
 } from '../util/resolve-components'
 import { NavigationDuplicated } from './errors'
 
+
 export class History {
   router: Router
   base: string
@@ -62,6 +63,8 @@ export class History {
     this.errorCbs.push(errorCb)
   }
 
+  // 跳转到哪个路由
+  // match 方法 可以 返回 一个 route信息
   transitionTo (
     location: RawLocation,
     onComplete?: Function,
@@ -200,6 +203,7 @@ export class History {
     })
   }
 
+  // 每次路由跳转之后 都会 重直 current 属性
   updateRoute (route: Route) {
     const prev = this.current
     this.current = route

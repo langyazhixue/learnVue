@@ -47,6 +47,7 @@ class KVuex {
 
  // install  注册组件
 KVuex.install = function(Vue) {
+  // 用 vue 的混入
   Vue.mixin({
     beforeCreate() {
       this.$store = this.$options.store

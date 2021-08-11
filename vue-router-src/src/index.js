@@ -13,6 +13,8 @@ import { HashHistory } from './history/hash'
 import { HTML5History } from './history/html5'
 import { AbstractHistory } from './history/abstract'
 
+// $router 指向当前的VueRouter实例，也就是new Vue({router:router})这里传入的router实例对象,可以使用上一节里列出的VueRouter实例的属性和方法
+// $route 指向当前跳转的路由对象,是一个包含当前的路由信息的对象,<router-view/>组件会通过这个属性来获取需要渲染的组件
 import type { Matcher } from './create-matcher'
 
 export default class VueRouter {
@@ -36,12 +38,13 @@ export default class VueRouter {
     this.app = null
     this.apps = []
     this.options = options
-    this.beforeHooks = []
+    this.beforeHooks = [] // 初始化三个数组，分别对应beforeEach、beforeResolve、afterEach三个全局导航守卫的注册函数
     this.resolveHooks = []
     this.afterHooks = []
+    // //将路由信息转换为一个对象信息，返回一个对象，含有match和addRoutes属性，分别对应两个函数
     this.matcher = createMatcher(options.routes || [], this)
 
-    let mode = options.mode || 'hash'
+    let mode = options.mode || 'hash' // 如果没有传mode,则默认为hash模式
     this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false
     if (this.fallback) {
       mode = 'hash'
@@ -52,6 +55,7 @@ export default class VueRouter {
     this.mode = mode
 
     switch (mode) {
+      // 根据 mode 使用 HTML5History 或者 HashHistory
       case 'history':
         this.history = new HTML5History(this, options.base)
         break
@@ -79,14 +83,16 @@ export default class VueRouter {
   get currentRoute (): ?Route {
     return this.history && this.history.current
   }
-
+  // 在 vue 实例 的 beforeCreate生命周期中执行
+  // app 指的是 vue 实际例子
   init (app: any /* Vue component instance */) {
     process.env.NODE_ENV !== 'production' && assert(
       install.installed,
       `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +
       `before creating root instance.`
     )
-
+    
+    // 
     this.apps.push(app)
 
     // set up app destroyed handler
@@ -107,9 +113,10 @@ export default class VueRouter {
     }
 
     this.app = app
-
+    // 获取history实例
     const history = this.history
 
+    // 执行History.transitionTo()进行路由初始化，路由初始化完成后会触发onReady()注册的回调函数的。
     if (history instanceof HTML5History) {
       history.transitionTo(history.getCurrentLocation())
     } else if (history instanceof HashHistory) {
@@ -122,7 +129,7 @@ export default class VueRouter {
         setupHashListener
       )
     }
-
+    // 设置路由监听
     history.listen(route => {
       this.apps.forEach((app) => {
         app._route = route
@@ -150,6 +157,7 @@ export default class VueRouter {
     this.history.onError(errorCb)
   }
 
+  // 路由到新的路由地址
   push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
     // $flow-disable-line
     if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
@@ -161,6 +169,7 @@ export default class VueRouter {
     }
   }
 
+  // 替换当前路由到新的路由(它不会向history添加新记录) 
   replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
     // $flow-disable-line
     if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
@@ -172,6 +181,7 @@ export default class VueRouter {
     }
   }
 
+  // 调用 this.history 的 go hanshu 
   go (n: number) {
     this.history.go(n)
   }

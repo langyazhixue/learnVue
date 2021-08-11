@@ -28,6 +28,7 @@ export class HashHistory extends History {
       setupScroll()
     }
 
+    // hashchange
     window.addEventListener(
       supportsPushState ? 'popstate' : 'hashchange',
       () => {
@@ -35,6 +36,7 @@ export class HashHistory extends History {
         if (!ensureSlash()) {
           return
         }
+        // 导航到 新的路由地址
         this.transitionTo(getHash(), route => {
           if (supportsScroll) {
             handleScroll(this.router, route, current, true)
@@ -46,7 +48,7 @@ export class HashHistory extends History {
       }
     )
   }
-
+  //  还是使用 pushHash 方法 // pushState
   push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
     const { current: fromRoute } = this
     this.transitionTo(
@@ -109,6 +111,7 @@ function ensureSlash (): boolean {
 export function getHash (): string {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
+  // 把 # 后面的 拿出来处理
   let href = window.location.href
   const index = href.indexOf('#')
   // empty path

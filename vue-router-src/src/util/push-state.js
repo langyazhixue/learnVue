@@ -30,6 +30,8 @@ export function pushState (url?: string, replace?: boolean) {
     if (replace) {
       history.replaceState({ key: getStateKey() }, '', url)
     } else {
+      //  调用的是 浏览器的 pushState
+      // url 就是 浏览器的路径变化
       history.pushState({ key: setStateKey(genStateKey()) }, '', url)
     }
   } catch (e) {

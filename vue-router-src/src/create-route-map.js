@@ -45,7 +45,11 @@ export function createRouteMap (
       warn(false, `Non-nested routes must include a leading slash character. Fix the following routes: \n${pathNames}`)
     }
   }
-
+  // nameMap是给命名路由用的，
+  // pathList是存储所有的路劲，
+    // ['/login','/hello','/info/:id']
+  // pathMap才是所有路由记录的地方。
+    // [{hello:{},login:{},}]
   return {
     pathList,
     pathMap,
@@ -125,6 +129,7 @@ function addRouteRecord (
       const childMatchAs = matchAs
         ? cleanPath(`${matchAs}/${child.path}`)
         : undefined
+      // 把 record  当成是 父亲
       addRouteRecord(pathList, pathMap, nameMap, child, record, childMatchAs)
     })
   }

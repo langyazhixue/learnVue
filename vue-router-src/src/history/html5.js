@@ -19,16 +19,17 @@ export class HTML5History extends History {
     }
 
     const initLocation = getLocation(this.base)
+
+    // 监听 popstate 方法 
     window.addEventListener('popstate', e => {
       const current = this.current
-
       // Avoiding first `popstate` event dispatched in some browsers but first
       // history route not updated since async guard at the same time.
       const location = getLocation(this.base)
       if (this.current === START && location === initLocation) {
         return
       }
-
+      // 调用 transitionTo 方法 ，修改 current 信息，current就是 route信息
       this.transitionTo(location, route => {
         if (supportsScroll) {
           handleScroll(router, route, current, true)
@@ -38,12 +39,18 @@ export class HTML5History extends History {
   }
 
   go (n: number) {
+    // 调用的是原生 的 window.history go 
     window.history.go(n)
   }
 
+  // 我们执行push()进行路由跳转时，会执行VueRouter源码内History对象上的push()操作，
+  // 然后会执行 transitionTo()函数进行路由跳转，在该函数内首先会执行normalizeLocation对参数做出修正，统一修正为一个对象，因此对于push('/login')和push({path:'/login'})来说是一样的
   push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
     const { current: fromRoute } = this
+    // 主动 调用 transitionTo 函数
     this.transitionTo(location, route => {
+      // 主动 修改 current 的值
+      // pushState 会修改浏览器 history 记录，但是并不会 刷新浏览器
       pushState(cleanPath(this.base + route.fullPath))
       handleScroll(this.router, route, fromRoute, false)
       onComplete && onComplete(route)

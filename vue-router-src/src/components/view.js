@@ -1,6 +1,11 @@
 import { warn } from '../util/warn'
 import { extend } from '../util/misc'
 
+// router-view 是一个 函数式组件
+// router-view是一个 functional 组件，渲染路径匹配到的视图组件。<router-view> 渲染的组件还可以内嵌自己的 <router-view>，根据嵌套路径，渲染嵌套组件
+
+// 它只有一个名为name的props,这个name还有个默认值，就是default,一般情况下，我们不用传递name,只有在命名视图的情况下，我们需要传递name,命名视图就是在同级展示多个视图，而不是嵌套的展示出来，
+// router-view组件渲染时是从VueRouter实例._route.matched属性获取需要渲染的组件
 export default {
   name: 'RouterView',
   functional: true,
@@ -28,6 +33,7 @@ export default {
     while (parent && parent._routerRoot !== parent) {
       const vnodeData = parent.$vnode && parent.$vnode.data
       if (vnodeData) {
+        // 组件嵌套的层次
         if (vnodeData.routerView) {
           depth++
         }
@@ -35,8 +41,10 @@ export default {
           inactive = true
         }
       }
+      // 获取父组件的$createElement函数引用  这样组件在执行render时可以用命名插槽
       parent = parent.$parent
     }
+    // 组件嵌套的层次
     data.routerViewDepth = depth
 
     // render previous view if the tree is inactive and kept-alive
@@ -44,6 +52,8 @@ export default {
       return h(cache[name], data, children)
     }
 
+    // 知道目前是 组件嵌套的第一层，就拿出第几层 的 components
+    // 从matched属性当中获取当前层次的路由对象,这里保存了需要渲染的组件，这就是上面我们通过app.$route.matched获取的对象
     const matched = route.matched[depth]
     // render empty node if no matched route
     if (!matched) {
@@ -51,6 +61,7 @@ export default {
       return h()
     }
 
+    // 
     const component = cache[name] = matched.components[name]
 
     // attach instance registration hook
@@ -74,6 +85,7 @@ export default {
 
     // register instance in init hook
     // in case kept-alive component be actived when routes changed
+    // 在组件 init 事件 中 
     data.hook.init = (vnode) => {
       if (vnode.data.keepAlive &&
         vnode.componentInstance &&
